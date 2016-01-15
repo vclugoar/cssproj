@@ -1,0 +1,334 @@
+/*
+* File: MadLibz.java
+* Author: Vianny C. Lugo Aracena
+* Date: November 28th, 2015
+*/
+
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
+import java.text.NumberFormat;
+import javax.swing.*;
+import javax.swing.text.html.ObjectView;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.Objects;
+import java.util.Random;
+
+/*
+* Creates a MadLibs game.
+ */
+public class MadLibz implements ActionListener {
+
+    private JButton libButton;
+    private JButton libButton2;
+    private JTextField placeTxt;
+    private JTextField adjTxt;
+    private JTextField nounTxt;
+    private JTextField adverbTxt;
+    private JTextField verbTxt;
+    private JTextField pluralTxt;
+    private JTextField familyTxt;
+    private JTextField plantTxt;
+    private  JTextField gameTxt;
+    private JTextArea story;
+    private JPanel thePanel;
+    private int clickCount;
+    private BinaryTree btree;
+    private Random random;
+    private StoryLine storys;
+
+    /*
+    * Constructor.
+     */
+    public MadLibz() {
+
+        this.placeTxt = new JTextField(20);
+        this.nounTxt = new JTextField(20);
+        this.verbTxt = new JTextField(20);
+        this.adjTxt = new JTextField(20);
+        this.pluralTxt = new JTextField(20);
+        this.familyTxt = new JTextField(20);
+        this.plantTxt = new JTextField(20);
+        this.adverbTxt = new JTextField(20);
+        this.gameTxt = new JTextField(20);
+        this.story = new JTextArea();
+        this.libButton = new JButton("Lib it!");
+        this.libButton2 = new JButton("Lib it! Story 1");
+        this.thePanel = new JPanel();
+        this.random = new Random();
+        this.storys = new StoryLine();
+
+    }
+
+    /*
+    * Starts the game. Creates a frame that holds the game.
+     */
+    public void start() {
+
+        JPanel thePanel = new JPanel();
+        JFrame theFrame = new JFrame();
+
+        theFrame.setSize(500, 500);
+        Toolkit tk = Toolkit.getDefaultToolkit();
+
+        Dimension dim = tk.getScreenSize();
+
+        int xPos = (dim.width / 2) - (theFrame.getWidth() / 2); // x position. Gets the width of the screensize/2 and then
+        // subtracts from the width
+        int yPos = (dim.height / 2) - (theFrame.getHeight() / 2); // y position. divide to center
+
+        theFrame.setLocation(xPos, yPos);
+
+        theFrame.setResizable((false)); // doesn't allow people to resize the Jpanel window.
+        theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // exits on close
+        theFrame.setTitle("Non-dirty mad libzzzz");
+
+        // labels
+        JLabel title = new JLabel("MadLibs game!");
+        JLabel place = new JLabel("Name of a place: ");
+        JLabel noun = new JLabel("Noun: ");
+        JLabel verb = new JLabel("Verb ending in -ing: ");
+        JLabel adj = new JLabel("Adjective: "); // adjective
+        JLabel plural = new JLabel("Plural noun: "); // plural noun
+        JLabel family = new JLabel("Family member: "); // verb past tense
+        JLabel adverb = new JLabel("Adverb: ");
+        JLabel game = new JLabel("Game: ");
+        JLabel plant = new JLabel("Plant: ");
+
+        /*
+        * Creates a grid layout
+         */
+        theFrame.getContentPane().add(BorderLayout.SOUTH, libButton);
+        theFrame.getContentPane().add(BorderLayout.NORTH, title);
+
+        thePanel.setLayout(new GridBagLayout());
+        thePanel.setBackground(new Color(255, 153, 153));
+        theFrame.getContentPane().add(thePanel);
+        GridBagConstraints left = new GridBagConstraints();
+        left.anchor = GridBagConstraints.EAST;
+        GridBagConstraints right = new GridBagConstraints();
+        right.weightx = 2.0;
+        right.fill = GridBagConstraints.HORIZONTAL;
+        right.gridwidth = GridBagConstraints.REMAINDER;
+
+
+        thePanel.add(place, left);
+        thePanel.add(placeTxt, right);
+        thePanel.add(verb, left);
+        thePanel.add(verbTxt, right);
+        thePanel.add(adj, left);
+        thePanel.add(adjTxt, right);
+        thePanel.add(noun, left);
+        thePanel.add(nounTxt, right);
+        thePanel.add(plural, left);
+        thePanel.add(pluralTxt, right);
+        thePanel.add(family, left);
+        thePanel.add(familyTxt, right);
+        thePanel.add(plant, left);
+        thePanel.add(plantTxt, right);
+        thePanel.add(game, left);
+        thePanel.add(gameTxt, right);
+        thePanel.add(adverb, left);
+        thePanel.add(adverbTxt, right);
+        thePanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+        // adds action to button
+        this.libButton.addActionListener(this);
+        theFrame.add(thePanel);
+        theFrame.pack();
+        theFrame.setVisible(true);
+
+    }
+    /*
+    * Creates an introduction. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the adjective given as an input by the user.
+     */
+    public Object introduction () {
+
+        MyArrayList arrayOfIntros = new MyArrayList();
+        arrayOfIntros.add("A vacation is when you take a trip to some "); // adj place
+        arrayOfIntros.add("Bridget Jones is a " ); // adj  movie
+        arrayOfIntros.add("Steven Universe is a  "); // adj tv show
+
+        if (adjTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfIntros.get(random.nextInt(arrayOfIntros.size()));
+        } else {
+            return arrayOfIntros.get(arrayOfIntros.size() - 1); // else
+        }
+    }
+    /*
+    * Creates a beginning. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the noun given as an input by the user.
+     */
+    public Object beginning() {
+
+        MyArrayList arraysOfSentences = new MyArrayList();
+        arraysOfSentences.add("place with your family. Usually you go to some place that is near a/an "); // followed by noun
+        arraysOfSentences.add("movie that narrates the story of a woman with a "); // followed by noun
+        arraysOfSentences.add("cartoon show from Cartoon Network and it has "); // followed by noun
+
+
+        if (nounTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arraysOfSentences.get(random.nextInt(arraysOfSentences.size()));
+        } else {
+            return arraysOfSentences.get(arraysOfSentences.size() -1); // else
+        }
+    }
+    /*
+    * Creates a first body. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the plural noun given as an input by the user.
+     */
+    public Object firstBody() {
+        MyArrayList arrayOfFirstSentences = new MyArrayList();
+        arrayOfFirstSentences.add("A good vacation place is one where you can ride "); // followed by plural noun
+        arrayOfFirstSentences.add("Bridget Jones buys "); // followed by plural noun
+        arrayOfFirstSentences.add("Steven has a family of "); // followed by plural noun
+
+        if (pluralTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfFirstSentences.get(random.nextInt(arrayOfFirstSentences.size()));
+        } else {
+            return arrayOfFirstSentences.get(arrayOfFirstSentences.size() - 1); // else
+        }
+    }
+    /*
+    * Creates a second body. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the game given as an input by the user.
+     */
+    public Object secondBody() { // second body sentence
+        MyArrayList arrayOfSecondSentences = new MyArrayList();
+        arrayOfSecondSentences.add("or play "); // followed by game
+        arrayOfSecondSentences.add("and plays "); // followed by game
+        arrayOfSecondSentences.add("and plays "); // followed by game
+
+        if (gameTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfSecondSentences.get(random.nextInt(arrayOfSecondSentences.size()));
+        } else {
+            return arrayOfSecondSentences.get(arrayOfSecondSentences.size() - 1); // else
+        }
+    }
+    /*
+    * Creates a third body. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the family member given as an input by the user.
+     */
+    public Object thirdBody() {
+        MyArrayList arrayOfThirdSentences = new MyArrayList();
+        arrayOfThirdSentences.add("all night long. Last summer, my little "); // followed by family member
+        arrayOfThirdSentences.add("the whole afternoon. Last night, Bridget told her "); // followed by family member
+        arrayOfThirdSentences.add("until the end of times. 5 minutes ago, Steven told his "); // followed by family member
+
+        if (familyTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfThirdSentences.get(random.nextInt(arrayOfThirdSentences.size()));
+        } else {
+            return arrayOfThirdSentences.get(arrayOfThirdSentences.size() - 1); // else
+        }
+    }
+    /*
+    * Creates a fourth body. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the plant given as an input by the user.
+     */
+    public Object fourthBody() { /// add to storyline class
+        MyArrayList arrayOfFourthSentences = new MyArrayList();
+        arrayOfFourthSentences.add("got poisoned with "); // followed by plant
+        arrayOfFourthSentences.add("that she wanted "); // followed by plant
+        arrayOfFourthSentences.add("that he drank tea made of "); // followed by plant
+
+        if (plantTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfFourthSentences.get(random.nextInt(arrayOfFourthSentences.size()));
+        } else {
+            return arrayOfFourthSentences.get(arrayOfFourthSentences.size() - 1); // else
+        }
+    }
+    /*
+    * Creates a fifth body. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the place given as an input by the user.
+     */
+    public Object fifthBody() {
+        MyArrayList arrayOfFifthSentences = new MyArrayList();
+        arrayOfFifthSentences.add("My family will go to a "); // followed by place
+        arrayOfFifthSentences.add("After purchasing that, Bridget will go to a "); // followed by place
+        arrayOfFifthSentences.add("After his cup of tea, Steven will go to "); // followed by place
+
+        if (placeTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfFifthSentences.get(random.nextInt(arrayOfFifthSentences.size()));
+        } else {
+            return arrayOfFifthSentences.get(arrayOfFifthSentences.size() - 1); // else
+        }
+    }
+    /*
+    * Creates a sixth body. Contains an array of 3 possible strings that can be either randomly selected
+    * or the last one will be selected depending on the length of the verb given as an input by the user.
+     */
+    public Object sixthBody() {
+        MyArrayList arrayOfSixthSentences = new MyArrayList();
+        arrayOfSixthSentences.add("and I will practice "); // followed by verb
+        arrayOfSixthSentences.add("and she will perform "); // followed by verb
+        arrayOfSixthSentences.add("and for the first time he will attempt "); // followed by verb ending -ing
+
+        if (verbTxt.getText().length() < 5 ) { // if the length of user input is less than five:
+            return arrayOfSixthSentences.get(random.nextInt(arrayOfSixthSentences.size()));
+        } else {
+            return arrayOfSixthSentences.get(arrayOfSixthSentences.size() - 1); // else
+        }
+    }
+        /*
+        * Gives action to button.
+         */
+        public void actionPerformed(ActionEvent e) {
+
+            // Check if the source of the event was the button
+            if (e.getSource() == this.libButton) {
+
+                JFrame frame2 = new JFrame();
+                frame2.setSize(600, 500);
+                Toolkit tk = Toolkit.getDefaultToolkit();
+
+                Dimension dim = tk.getScreenSize();
+
+                int xPos = (dim.width / 2) - (frame2.getWidth() / 2); // x position. Gets the width of the screensize/2 and then
+                // subtracts from the width
+                int yPos = (dim.height / 2) - (frame2.getHeight() / 2); // y position. divide to center
+
+                frame2.setLocation(xPos, yPos);
+
+                frame2.setResizable((false)); // doesn't allow people to resize the Jpanel window.
+                frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // exits on close
+
+                /*
+                * Calls methods from the StoryLine class that stores the storyline in a hashmap or arraylist. The result is a story that may
+                * or may not make sense, because it depends on randomly selected strings depending on length of input.
+                 */
+                String text = ( "\n" + this.storys.introduction() + this.adjTxt.getText() + "\n" + this.beginning() + "\n" +
+                        this.nounTxt.getText() + " \n" + this.storys.firstSentence() + this.pluralTxt.getText() +
+                        "\n" + this.secondBody()  + this.gameTxt.getText() + "\n"  + this.storys.thirdSentence() +
+                         this.familyTxt.getText() + "\n" + this.fourthBody()  + this.plantTxt.getText() +
+                         "\n" + this.storys.fifthSentence() + "\n"  + this.placeTxt.getText() + "\n" +  this.storys.sixthSentence()
+                        + this.verbTxt.getText() + " \n\n \t\t\t|THE END|");
+                story.append(text);
+
+                JScrollPane scrollbar1 = new JScrollPane(this.story, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+                this.thePanel.add(scrollbar1);
+                frame2.add(this.thePanel);
+                frame2.setVisible(true);
+            }
+
+        }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        MadLibz madz = new MadLibz();
+        madz.start();
+
+    }
+
+
+}
