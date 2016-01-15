@@ -1,0 +1,115 @@
+/*
+* File: StoryLine.java
+* Author: Vianny C. Lugo Aracena
+* Date: November 28th, 2015
+*/
+
+/*
+* Creates a StoryLine and stores it into a hashmap.
+ */
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
+
+public class StoryLine {
+
+    private MadLibz mad;
+    private Random random;
+    private HashMap map1;
+
+
+    /*
+    * Constructor.
+     */
+    public StoryLine() {
+        random = new Random();
+        map1 = new HashMap();
+    }
+
+    /*
+    * Stores the introduction into a hashmap and returns it.
+     */
+    public Object introduction () {
+
+        MadLibz mad = new MadLibz();
+        map1.put("intro", mad.introduction());
+
+        return map1.get("intro");
+
+    }
+
+    /*
+    * Stores the beginning into a hashmap and returns it.
+     */
+    public Object beginning() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("beginning", mad.beginning());
+
+        return map1.get("beginning");
+
+    }
+    /*
+    * Stores the first sentence into a hashmap and returns it.
+     */
+    public Object firstSentence() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("first", mad.firstBody());
+
+        return map1.get("first");
+
+    }
+    /*
+    * Stores the secondSentence into a hashmap and returns it.
+     */
+    public  Object secondSentence() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("second", mad.secondBody());
+
+        return map1.get("second");
+
+    }
+    /*
+    * Stores the third sentence into a hashmap and returns it.
+     */
+    public Object thirdSentence() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("third", mad.thirdBody());
+
+        return map1.get("third");
+
+    }
+    /*
+    * Stores the fourth sentence into a hashmap and returns it.
+     */
+    public Object fourthSentence() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("fourth", mad.fourthBody());
+
+        return map1.get("fourth");
+
+    }
+    /*
+    * Stores the fifth into a hashmap and returns it.
+     */
+    public Object fifthSentence() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("fifth", mad.fifthBody());
+
+        return map1.get("fifth");
+
+    }
+    /*
+    * Stores the sixth sentence into a hashmap and returns it.
+     */
+    public Object sixthSentence() {
+        MadLibz mad = new MadLibz();
+        this.map1.put("sixth", mad.sixthBody());
+
+        return map1.get("sixth");
+
+    }
+
+
+}
+
